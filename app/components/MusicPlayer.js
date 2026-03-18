@@ -1,27 +1,33 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { FaPlay, FaPause } from 'react-icons/fa';
+import { Music } from 'lucide-react';
 
-export default function MusicPlayer({ isPlaying, onPlayPause }) {
+export default function MusicPlayer() {
+  const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
 
   useEffect(() => {
+    // Create audio element only on client side
+    audioRef.current = new Audio('/music.mp3'); // Make sure you have a music file in /public/music.mp3
+  }, []);
+
+  const togglePlay = () => {
     if (isPlaying) {
-      audioRef.current.play();
-    } else {
       audioRef.current.pause();
+    } else {
+      audioRef.current.play();
     }
-  }, [isPlaying]);
+    setIsPlaying(!isPlaying);
+  };
 
   return (
     <div className="fixed bottom-8 right-8 z-50">
-      <audio ref={audioRef} src="/music.mp3" loop />
-      <button
-        onClick={onPlayPause}
-        className="bg-gray-800 text-white rounded-full p-4 shadow-lg hover:bg-gray-700 transition-colors duration-300"
+      <button 
+        onClick={togglePlay}
+        className="w-12 h-12 bg-[#1a1a1a] text-[#f4f4f0] rounded-full flex items-center justify-center shadow-lg transform transition-transform hover:scale-110"
       >
-        {isPlaying ? <FaPause size={20} /> : <FaPlay size={20} />}
+        <Music size={20} className={isPlaying ? 'animate-pulse' : ''}/>
       </button>
     </div>
   );

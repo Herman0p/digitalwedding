@@ -7,71 +7,60 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Countdown() {
-  const componentRef = useRef(null);
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const countdownRef = useRef(null);
+  const targetDate = new Date('2024-11-24T09:00:00');
+
+  const calculateTimeLeft = () => {
+    const difference = +targetDate - +new Date();
+    let timeLeft = {};
+
+    if (difference > 0) {
+      timeLeft = {
+        Hari: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        Jam: Math.floor((difference / (1000 * 60 * 60)) % 24),
+        Menit: Math.floor((difference / 1000 / 60) % 60),
+        Detik: Math.floor((difference / 1000) % 60)
+      };
+    }
+
+    return timeLeft;
+  };
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
   useEffect(() => {
-    const el = componentRef.current;
-    gsap.fromTo(
-      el,
-      { opacity: 0, y: 50 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 80%',
-          toggleActions: 'play none none reverse',
-        },
-      }
-    );
-
-    const calculateTimeLeft = () => {
-      const difference = +new Date('2024-06-15T16:00:00') - +new Date();
-      let timeLeft = {};
-
-      if (difference > 0) {
-        timeLeft = {
-          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-          minutes: Math.floor((difference / 1000 / 60) % 60),
-          seconds: Math.floor((difference / 1000) % 60),
-        };
-      }
-
-      return timeLeft;
-    };
-
-    const timer = setInterval(() => {
+    const timer = setTimeout(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
 
-    return () => clearInterval(timer);
+    return () => clearTimeout(timer);
+  });
+
+  useEffect(() => {
+    gsap.from(countdownRef.current.children, {
+        opacity: 0, 
+        y: 50, 
+        stagger: 0.2,
+        duration: 1.2, 
+        ease: 'power4.out', 
+        scrollTrigger: {
+            trigger: countdownRef.current,
+            start: 'top 85%',
+            once: true
+        }
+    });
   }, []);
 
   return (
-    <section ref={componentRef} className="py-20 px-4 text-center bg-gray-50">
-      <h2 className="font-serif text-4xl mb-8">Mancano solo...</h2>
-      <div className="flex justify-center space-x-8 font-sans text-2xl">
-        <div>
-          <p className="text-5xl font-bold">{timeLeft.days}</p>
-          <p className="text-lg">Giorni</p>
+    <section className="py-24 bg-[#f4f4f0]">
+        <div ref={countdownRef} className="container mx-auto px-8 max-w-3xl grid grid-cols-4 gap-4 text-center text-[#1a1a1a]">
+            {Object.entries(timeLeft).map(([unit, value]) => (
+                <div key={unit} className="thin-border p-6">
+                    <p className="font-serif text-5xl md:text-7xl">{value}</p>
+                    <p className="font-sans text-sm uppercase tracking-widest mt-2">{unit}</p>
+                </div>
+            ))}
         </div>
-        <div>
-          <p className="text-5xl font-bold">{timeLeft.hours}</p>
-          <p className="text-lg">Ore</p>
-        </div>
-        <div>
-          <p className="text-5xl font-bold">{timeLeft.minutes}</p>
-          <p className="text-lg">Minuti</p>
-        </div>
-        <div>
-          <p className="text-5xl font-bold">{timeLeft.seconds}</p>
-          <p className="text-lg">Secondi</p>
-        </div>
-      </div>
     </section>
   );
 }

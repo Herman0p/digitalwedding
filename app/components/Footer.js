@@ -7,30 +7,30 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Footer() {
-    const textRef = useRef(null);
+  const footerRef = useRef(null);
 
-    useEffect(() => {
-        gsap.from(textRef.current.children, {
-            opacity: 0,
-            y: 50,
-            stagger: 0.2,
-            duration: 1.5,
-            ease: 'power4.out',
-            scrollTrigger: {
-                trigger: textRef.current,
-                start: 'top 95%',
-                once: true
-            }
-        });
-    }, []);
+  useEffect(() => {
+    gsap.from(footerRef.current, {
+        opacity: 0, 
+        duration: 1.5, 
+        ease: 'power4.out', 
+        scrollTrigger: {
+            trigger: footerRef.current,
+            start: 'top 95%',
+            once: true
+        }
+    });
+  }, []);
 
-    return (
-        <footer className="py-32 bg-[#f4f4f0] text-[#1a1a1a] text-center">
-            <div ref={textRef} className="container mx-auto px-8 max-w-4xl">
-                <h3 className="font-serif text-4xl md:text-5xl uppercase !leading-tight">Herman & Elis</h3>
-                <p className="font-sans text-base mt-4">Terima kasih atas doa restu Anda.</p>
-                <p className="font-sans text-sm mt-12 tracking-widest uppercase">XXIV.XI.MMXXIV</p>
-            </div>
-        </footer>
-    )
+  return (
+    <footer ref={footerRef} className="py-24 bg-[#f4f4f0] text-center text-[#1a1a1a]">
+      <div className="container mx-auto px-8">
+        <p className="font-serif text-3xl md:text-5xl !leading-tight">Merupakan suatu kehormatan dan kebahagiaan<br/>bagi kami apabila Bapak/Ibu/Saudara/i<br/>berkenan hadir untuk memberikan doa restu.</p>
+        <p className="font-sans text-lg mt-12">Atas kehadiran dan doa restu, kami ucapkan terima kasih.</p>
+        <h2 className="font-serif text-6xl md:text-8xl lg:text-9xl !leading-none mt-24">Herman & Elis</h2>
+        <p className="font-sans text-sm mt-24">Made with ♡ by Herman</p>
+
+      </div>
+    </footer>
+  );
 }
