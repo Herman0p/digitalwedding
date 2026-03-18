@@ -1,54 +1,57 @@
-'use client';
+"use client";
 
 import { gsap } from 'gsap';
 import { useLayoutEffect, useRef } from 'react';
 
 export default function Cover({ onOpen }) {
-  const coverRef = useRef(null);
+  const container = useRef(null);
 
   useLayoutEffect(() => {
+    gsap.set(container.current, { visibility: 'visible' });
     const tl = gsap.timeline();
-    tl.fromTo(
-      coverRef.current.querySelectorAll('.reveal'),
-      { y: 50, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, stagger: 0.5, ease: 'power3.out' }
+
+    tl.fromTo('.char', 
+        { y: '100%', opacity: 0 },
+        { y: '0%', opacity: 1, stagger: 0.05, duration: 1.5, ease: 'power4.out' }
     );
   }, []);
 
   const handleOpen = () => {
-    gsap.to(coverRef.current, {
-      opacity: 0,
+    gsap.to(container.current, {
+      y: '-100%',
       duration: 1.5,
       ease: 'power4.inOut',
-      onComplete: () => {
-        if (onOpen) {
-          onOpen();
-        }
-      },
+      onComplete: onOpen,
     });
   };
 
+  const name = "Adovasio & Psiche";
+  const date = "XXIV XI";
+
   return (
     <div
-      ref={coverRef}
-      className="fixed inset-0 bg-gray-900 text-white flex flex-col items-center justify-center z-50 text-center p-4"
-      style={{
-        backgroundImage: 'url("https://images.unsplash.com/photo-1523438885209-e585350fd3a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80")',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
+      ref={container}
+      className="fixed inset-0 bg-[#111] text-white flex items-center justify-center z-50 invisible"
     >
-      <div className="absolute inset-0 bg-black opacity-50"></div>
-      <div className="relative z-10 flex flex-col items-center">
-        <h2 className="font-serif text-2xl mb-2 reveal">The Wedding Of</h2>
-        <h1 className="font-serif text-6xl md:text-8xl mb-4 reveal">Adovasio & Psiche</h1>
-        <p className="font-sans text-lg mb-8 reveal">24.11.2024</p>
-        <button
-          onClick={handleOpen}
-          className="reveal bg-white text-gray-900 font-sans py-3 px-8 rounded-full hover:bg-gray-200 transition-colors duration-300"
-        >
-          Open Invitation
-        </button>
+      <div className="text-center">
+        <h1 className="font-serif text-[18vw] lg:text-[15vw] leading-none tracking-tighter overflow-hidden">
+          {name.split("").map((char, index) => (
+            <span key={index} className="char inline-block">{char === ' ' ? '\u00A0' : char}</span>
+          ))}
+        </h1>
+        <h2 className="font-serif text-[10vw] lg:text-[8vw] leading-none tracking-tighter mt-4 overflow-hidden">
+            {date.split("").map((char, index) => (
+                <span key={index} className="char inline-block">{char === ' ' ? '\u00A0' : char}</span>
+            ))}
+        </h2>
+        <div className="mt-12">
+            <button
+              onClick={handleOpen}
+              className="font-sans text-lg border-b border-white pb-2 hover:text-gray-400 hover:border-gray-400 transition-colors duration-300"
+            >
+              Enter
+            </button>
+        </div>
       </div>
     </div>
   );
