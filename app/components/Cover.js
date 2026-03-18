@@ -25,7 +25,7 @@ export default function Cover({ onOpen }) {
     });
   };
 
-  const name = "Adovasio & Psiche";
+  const name = "Herman & Elis";
   const date = "XXIV XI";
 
   return (
@@ -36,12 +36,12 @@ export default function Cover({ onOpen }) {
       <div className="text-center">
         <h1 className="font-serif text-[18vw] lg:text-[15vw] leading-none tracking-tighter overflow-hidden">
           {name.split("").map((char, index) => (
-            <span key={index} className="char inline-block">{char === ' ' ? '\u00A0' : char}</span>
+            <span key={index} className="char inline-block">{char === ' ' ? ' ' : char}</span>
           ))}
         </h1>
         <h2 className="font-serif text-[10vw] lg:text-[8vw] leading-none tracking-tighter mt-4 overflow-hidden">
             {date.split("").map((char, index) => (
-                <span key={index} className="char inline-block">{char === ' ' ? '\u00A0' : char}</span>
+                <span key={index} className="char inline-block">{char === ' ' ? ' ' : char}</span>
             ))}
         </h2>
         <div className="mt-12">

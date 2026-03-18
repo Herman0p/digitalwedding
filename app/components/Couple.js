@@ -73,13 +73,13 @@ export default function Couple() {
     <section className="bg-[#111] text-white overflow-hidden">
        <div className="container mx-auto max-w-none px-0">
             <Person 
-                name="Adovasio"
+                name="Herman"
                 description="Son of Mr. First & Mrs. Second"
                 image="https://images.unsplash.com/photo-1574271943906-8733293845b9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 imageSide="right"
             />
             <Person 
-                name="Psiche"
+                name="Elis"
                 description="Daughter of Mr. Third & Mrs. Fourth"
                 image="https://images.unsplash.com/photo-1599834562135-b8b5182a32af?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 imageSide="left"

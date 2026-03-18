@@ -29,7 +29,7 @@ export default function Footer() {
 
   return (
     <footer ref={componentRef} className="py-8 px-4 text-center font-sans text-sm text-gray-500">
-      <p>&copy; 2024 Adovasio & Psiche. Tutti i diritti riservati.</p>
+      <p>&copy; 2024 Herman & Elis. Tutti i diritti riservati.</p>
       <p>Con amore, da Verona.</p>
     </footer>
   );

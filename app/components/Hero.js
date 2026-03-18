@@ -29,7 +29,7 @@ export default function Hero() {
       style={{ backgroundImage: "url('/couple-bg.jpg')" }}
     >
       <div className="bg-background bg-opacity-50 p-8 rounded-lg">
-        <h1 className="font-serif text-6xl md:text-8xl">Amore & Psiche</h1>
+        <h1 className="font-serif text-6xl md:text-8xl">Herman & Elis</h1>
         <p className="font-sans text-xl md:text-2xl mt-4">24.08.2024</p>
       </div>
     </section>
