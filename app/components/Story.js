@@ -1,51 +1,121 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Story() {
-  const containerRef = useRef(null);
+  const component = useRef(null);
   const titleRef = useRef(null);
   const textRef = useRef(null);
-  const imageRef = useRef(null);
+  const image1WrapperRef = useRef(null);
+  const image2WrapperRef = useRef(null);
+  const image1Ref = useRef(null);
+  const image2Ref = useRef(null);
 
-  useEffect(() => {
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: 'top 60%',
-        once: true
-      }
-    });
-    
-    tl.from(titleRef.current, { y: '50%', opacity: 0, duration: 1.2, ease: 'power4.out' })
-      .from(textRef.current.children, { y: '30%', opacity: 0, stagger: 0.15, duration: 1, ease: 'power4.out' }, "-=0.8")
-      .from(imageRef.current, { clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)', duration: 1.5, ease: 'power4.inOut' }, "-=1");
+  useLayoutEffect(() => {
+    let ctx = gsap.context(() => {
+      // Animate Text
+      gsap.from([titleRef.current, textRef.current.children], {
+        y: 50,
+        opacity: 0,
+        stagger: 0.1,
+        duration: 1.2,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: component.current,
+          start: 'top 70%',
+          once: true
+        }
+      });
 
+      // Animate Image 1 Reveal
+      gsap.from(image1WrapperRef.current, {
+        clipPath: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)',
+        duration: 1.5,
+        ease: 'power4.inOut',
+        scrollTrigger: {
+          trigger: image1WrapperRef.current,
+          start: 'top 85%',
+          once: true
+        }
+      });
+
+      // Animate Image 2 Reveal
+      gsap.from(image2WrapperRef.current, {
+        clipPath: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)',
+        duration: 1.5,
+        ease: 'power4.inOut',
+        delay: 0.2, // slight delay for staggered effect
+        scrollTrigger: {
+          trigger: image2WrapperRef.current,
+          start: 'top 85%',
+          once: true
+        }
+      });
+
+      // Parallax for Image 1
+      gsap.to(image1Ref.current, {
+        y: -100,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: image1WrapperRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        }
+      });
+      
+      // Parallax for Image 2
+      gsap.to(image2Ref.current, {
+        y: 50, 
+        ease: 'none',
+        scrollTrigger: {
+          trigger: image2WrapperRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        }
+      });
+
+    }, component);
+    return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={containerRef} className="py-32 md:py-48 bg-[#f4f4f0]">
+    <section ref={component} className="py-32 md:py-48 bg-[#f4f4f0] overflow-hidden">
       <div className="container mx-auto px-8 max-w-7xl">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-center">
-          <div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-8 items-start">
+          
+          <div className="lg:sticky top-24">
              <h2 ref={titleRef} className="font-serif text-5xl md:text-7xl uppercase !leading-tight text-[#1a1a1a]">
-                Kisah Kami
+                Our Story
              </h2>
-             <div ref={textRef} className="font-sans text-base md:text-lg text-[#1a1a1a] leading-relaxed mt-8 space-y-6">
-                <p>Pertemuan kami dimulai dari lingkaran pertemanan yang sama. Tanpa disangka, percakapan santai dan kesamaan minat membawa kami pada sebuah perjalanan yang tidak pernah kami duga sebelumnya. </p>
-                <p>Seiring berjalannya waktu, kami menyadari bahwa ada sesuatu yang istimewa di antara kami. Setiap momen yang kami lewati bersama terasa begitu berarti, menguatkan keyakinan bahwa kami ditakdirkan untuk bersama. Kini, kami siap melangkah ke jenjang yang lebih serius, mengikat janji suci untuk selamanya.</p>
+             <div ref={textRef} className="font-sans text-base md:text-lg text-[#1a1a1a] leading-relaxed mt-8 space-y-6 max-w-lg">
+                <p>Our story began within the same circle of friends. An unexpected, casual conversation sparked a journey we never anticipated.</p>
+                <p>As time went on, we realized something special was blossoming between us. Every shared moment felt profoundly significant, strengthening our belief that we were destined to be together. Now, we are ready to take the next step, a sacred vow to bind our lives forever.</p>
              </div>
           </div>
-          <div ref={imageRef} className="relative h-[70vh] w-full overflow-hidden thin-border">
-             <div 
-                className="w-full h-full bg-cover bg-center"
-                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1543833138-d35272a80523?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }}
-            ></div>
+          
+          <div className="grid grid-cols-5 gap-4 lg:mt-24">
+              <div ref={image1WrapperRef} className="col-span-4 col-start-2 relative h-[60vh] md:h-[75vh] overflow-hidden">
+                <div 
+                  ref={image1Ref} 
+                  className="w-full h-[120%] bg-cover bg-center"
+                  style={{ backgroundImage: "url('https://images.unsplash.com/photo-1597626214015-349035254238?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }}
+                ></div>
+              </div>
+              <div ref={image2WrapperRef} className="col-span-3 col-start-1 row-start-1 self-end -mb-16 -ml-4 z-10 relative h-[35vh] md:h-[40vh] overflow-hidden">
+                <div 
+                  ref={image2Ref}
+                  className="w-full h-[120%] bg-cover bg-center" 
+                  style={{ backgroundImage: "url('https://images.unsplash.com/photo-1522093019184-6e0e055a4435?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }}
+                ></div>
+              </div>
           </div>
+
         </div>
       </div>
     </section>

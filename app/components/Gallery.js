@@ -1,67 +1,91 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const images = [
-    { src: 'https://images.unsplash.com/photo-1523438909602-f5234d4beeac?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', alt: 'Couple walking in Paris' },
-    { src: 'https://images.unsplash.com/photo-1522398545874-a21a83933c1d?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', alt: 'Eiffel tower view' },
-    { src: 'https://images.unsplash.com/photo-1541334023349-887363c32104?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', alt: 'Couple holding hands' },
-    { src: 'https://images.unsplash.com/photo-1610213198305-a3550b06b5ba?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', alt: 'Wedding detail shot' },
-    { src: 'https://images.unsplash.com/photo-1515934751699-e58f543d18c9?q=80&w=2690&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', alt: 'Elegant bride' },
-    { src: 'https://images.unsplash.com/photo-1509610918848-3c66869622ac?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', alt: 'Parisian street' },
-];
+const AnimatedImage = ({ src, wrapperClassName, y = -50 }) => {
+  const wrapperRef = useRef(null);
+  const imageRef = useRef(null);
 
-export default function Gallery() {
-  const titleRef = useRef(null);
-  const galleryRef = useRef(null);
-
-  useEffect(() => {
-    gsap.from(titleRef.current, {
-        y: '50%', 
-        opacity: 0, 
-        duration: 1.2, 
-        ease: 'power4.out', 
+  useLayoutEffect(() => {
+    let ctx = gsap.context(() => {
+      // Reveal Animation
+      gsap.from(wrapperRef.current, {
+        clipPath: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)',
+        duration: 1.5,
+        ease: 'power4.inOut',
         scrollTrigger: {
-            trigger: titleRef.current,
-            start: 'top 90%',
-            once: true
-        }
-    });
+          trigger: wrapperRef.current,
+          start: 'top 85%',
+          once: true,
+        },
+      });
 
-    const imageElements = galleryRef.current.children;
-    gsap.from(imageElements, {
-        opacity: 0,
-        y: 50,
-        stagger: 0.1,
-        duration: 1,
-        ease: 'power4.out',
+      // Parallax Animation
+      gsap.to(imageRef.current, {
+        y,
+        ease: 'none',
         scrollTrigger: {
-            trigger: galleryRef.current,
-            start: 'top 80%',
-            once: true
-        }
-    });
-
-  }, []);
+          trigger: wrapperRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        },
+      });
+    }, wrapperRef);
+    return () => ctx.revert();
+  }, [y]);
 
   return (
-    <section className="py-32 md:py-48 bg-[#f4f4f0] overflow-hidden">
-      <div className="container mx-auto px-8">
-        <h2 ref={titleRef} className="font-serif text-5xl md:text-7xl lg:text-8xl uppercase !leading-tight text-center mb-24">
-            Galeri Cinta
-        </h2>
-        <div ref={galleryRef} className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
-            <div className="col-span-1 row-span-2 thin-border"><img src={images[0].src} alt={images[0].alt} className="w-full h-full object-cover" /></div>
-            <div className="col-span-1 thin-border"><img src={images[1].src} alt={images[1].alt} className="w-full h-full object-cover" /></div>
-            <div className="col-span-1 thin-border"><img src={images[2].src} alt={images[2].alt} className="w-full h-full object-cover" /></div>
-            <div className="col-span-1 thin-border"><img src={images[3].src} alt={images[3].alt} className="w-full h-full object-cover" /></div>
-            <div className="col-span-1 thin-border"><img src={images[4].src} alt={images[4].alt} className="w-full h-full object-cover" /></div>
-            <div className="col-span-2 md:col-span-1 thin-border"><img src={images[5].src} alt={images[5].alt} className="w-full h-full object-cover" /></div>
+    <div ref={wrapperRef} className={`relative overflow-hidden ${wrapperClassName}`}>
+        <div ref={imageRef} style={{ backgroundImage: `url(${src})` }} className="w-full h-[120%] bg-cover bg-center"></div>
+    </div>
+  );
+}
+
+export default function Gallery() {
+  return (
+    <section className="bg-[#f4f4f0] text-[#1a1a1a] py-32 md:py-48">
+      <div className="container mx-auto max-w-7xl px-8">
+        <h2 className="font-serif text-5xl md:text-7xl uppercase !leading-tight text-center mb-24 md:mb-32">Gallery</h2>
+        
+        <div className="grid grid-cols-12 gap-y-16 md:gap-8">
+
+          {/* Row 1 */}
+          <div className="col-span-12 md:col-span-6 md:col-start-2">
+            <AnimatedImage 
+              src="https://images.unsplash.com/photo-1597626214015-349035254238?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              wrapperClassName="h-[60vh] md:h-[80vh]" 
+            />
+          </div>
+          <div className="col-span-10 md:col-span-3 md:col-start-9 self-center">
+            <AnimatedImage 
+              src="https://images.unsplash.com/photo-1522093019184-6e0e055a4435?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              wrapperClassName="h-[40vh] md:h-[45vh]" 
+              y={50}
+            />
+          </div>
+
+          {/* Row 2 */}
+          <div className="col-span-10 col-start-2 md:col-span-4 md:col-start-auto mt-12 md:mt-0">
+            <AnimatedImage 
+              src="https://images.unsplash.com/photo-1541187714594-7395406a336e?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              wrapperClassName="h-[50vh]" 
+              y={-30}
+            />
+          </div>
+          <div className="col-span-12 md:col-span-6 md:col-start-6 self-end">
+             <AnimatedImage 
+              src="https://images.unsplash.com/photo-1618218567841-784f47f22551?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              wrapperClassName="h-[55vh] md:h-[70vh] -mt-16 md:mt-0" 
+              y={20}
+            />
+          </div>
         </div>
+
       </div>
     </section>
   );
