@@ -16,7 +16,7 @@ export default function Footer() {
       { opacity: 0 },
       {
         opacity: 1,
-        duration: 1,
+        duration: 1.5,
         ease: 'power3.out',
         scrollTrigger: {
           trigger: el,
@@ -28,9 +28,10 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer ref={componentRef} className="py-8 px-4 text-center font-sans text-sm text-gray-500">
-      <p>&copy; 2024 Herman & Elis. Tutti i diritti riservati.</p>
-      <p>Con amore, da Verona.</p>
+    <footer ref={componentRef} className="py-16 px-4 text-center font-sans text-base text-gray-500 bg-[#0a0a0a]">
+      <p className="font-serif text-2xl text-[#f4f4f0]">Herman & Elis</p>
+      <p className="mt-4">&copy; 2024. All Rights Reserved.</p>
+      <p>With love, from Verona.</p>
     </footer>
   );
 }

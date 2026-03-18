@@ -2,10 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;700&display=swap');
-
 body {
-  background-color: #f0f0f0;
-  color: #1a1a1a;
-  font-family: 'Inter', sans-serif;
+  background-color: #0a0a0a;
+  color: #f4f4f0;
+  font-family: var(--font-inter);
+}
+
+.font-serif {
+  font-family: var(--font-playfair);
+}
+
+.font-sans {
+  font-family: var(--font-inter);
 }
