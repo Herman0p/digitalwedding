@@ -13,11 +13,9 @@ const Person = ({ name, description, image, imageSide = 'left' }) => {
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // Image Parallax
       gsap.fromTo(imageRef.current.querySelector('div'), 
-        { yPercent: -10, scale: 1.2 }, 
+        { scale: 1.2 }, 
         {
-          yPercent: 10,
           scale: 1,
           ease: 'none',
           scrollTrigger: {
@@ -29,12 +27,11 @@ const Person = ({ name, description, image, imageSide = 'left' }) => {
         }
       );
       
-      // Text Reveal
       gsap.from(textRef.current.children, {
-        y: '100%',
-        clipPath: 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)',
+        y: '50%',
+        opacity: 0,
         stagger: 0.1,
-        duration: 1.5,
+        duration: 1.2,
         ease: 'power4.out',
         scrollTrigger: {
             trigger: containerRef.current,
@@ -47,20 +44,20 @@ const Person = ({ name, description, image, imageSide = 'left' }) => {
     return () => ctx.revert();
   }, []);
 
-  const imageClass = "absolute inset-0 w-full h-full bg-cover bg-center opacity-80";
-  const nameOrder = imageSide === 'left' ? 'md:order-2' : 'md:order-1';
-  const textAlign = imageSide === 'left' ? 'text-left' : 'text-right';
+  const imageOrder = imageSide === 'left' ? 'md:order-1' : 'md:order-2';
+  const textOrder = imageSide === 'left' ? 'md:order-2' : 'md:order-1';
+  const textAlign = imageSide === 'left' ? 'md:text-left' : 'md:text-right';
 
   return (
-    <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-2 items-center gap-0 my-32 md:my-64">
-      <div ref={imageRef} className={`relative h-[80vh] md:h-[120vh] ${nameOrder} overflow-hidden`}>
-        <div style={{ backgroundImage: `url(${image})`}} className={imageClass}></div>
+    <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-2 items-center gap-12 md:gap-24 my-24 md:my-48">
+      <div ref={imageRef} className={`relative h-[70vh] md:h-[90vh] ${imageOrder} overflow-hidden`}>
+        <div style={{ backgroundImage: `url(${image})`}} className="w-full h-full bg-cover bg-center"></div>
       </div>
-      <div ref={textRef} className={`py-12 px-6 md:px-24 ${textAlign} flex flex-col ${imageSide === 'left' ? 'items-start' : 'items-end'}`}>
-        <h2 className="font-serif text-[18vw] md:text-[10rem] lg:text-[14rem] !leading-none uppercase" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)' }}>
+      <div ref={textRef} className={`py-12 px-6 md:px-0 ${textOrder} ${textAlign}`}>
+        <h2 className="font-serif text-6xl md:text-8xl lg:text-9xl !leading-none uppercase">
             {name}
         </h2>
-        <p className="font-sans text-lg mt-6 max-w-sm" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)' }}>
+        <p className="font-sans text-base md:text-lg mt-6 max-w-md ${imageSide === 'left' ? 'md:ml-auto' : 'md:mr-auto'} leading-relaxed">
             {description}
         </p>
       </div>
@@ -70,19 +67,19 @@ const Person = ({ name, description, image, imageSide = 'left' }) => {
 
 export default function Couple() {
   return (
-    <section className="bg-[#0a0a0a] text-[#f4f4f0] overflow-hidden">
-       <div className="container mx-auto max-w-none px-0">
+    <section className="bg-[#f4f4f0] text-[#1a1a1a] overflow-hidden py-32">
+       <div className="container mx-auto max-w-7xl px-8">
             <Person 
                 name="Herman"
-                description="He is a whirlwind of creative energy, a musician who finds poetry in chaos. His heart beats in sync with the rhythm of the city, yet he finds solace in the quiet moments, in the gentle cadence of her laughter."
-                image="https://images.unsplash.com/photo-1542844339-2166a1a1e459?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                imageSide="right"
+                description="Seorang musisi yang menemukan puisi dalam hiruk pikuk kota. Iramanya selaras dengan detak jantung kota, namun ketenangan ia temukan dalam tawa lembut sang kekasih."
+                image="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                imageSide="left"
             />
             <Person 
                 name="Elis"
-                description="She is a painter of emotions, a soul who sees the world in hues of vibrant dreams. Her spirit is a serene landscape, a calm harbor in his stormy sea, her touch a masterpiece of gentle grace."
-                image="https://images.unsplash.com/photo-1599834562135-b8b5182a32af?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                imageSide="left"
+                description="Pelukis emosi yang melihat dunia dalam rona mimpi. Jiwanya adalah lanskap yang tenang, sebuah pelabuhan damai di tengah lautan badai sang pria, di mana setiap sentuhannya adalah sebuah mahakarya keanggunan."
+                image="https://images.unsplash.com/photo-1541187714594-7395406a336e?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                imageSide="right"
             />
       </div>
     </section>

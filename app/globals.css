@@ -3,9 +3,13 @@
 @tailwind utilities;
 
 body {
-  background-color: #0a0a0a;
-  color: #f4f4f0;
+  background-color: #f4f4f0; 
+  color: #1a1a1a;
   font-family: var(--font-inter);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-playfair);
 }
 
 .font-serif {
@@ -14,4 +18,8 @@ body {
 
 .font-sans {
   font-family: var(--font-inter);
+}
+
+.thin-border {
+  border: 1px solid #d1d1c7;
 }

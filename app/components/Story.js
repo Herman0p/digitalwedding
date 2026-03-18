@@ -8,28 +8,30 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Story() {
     const containerRef = useRef(null);
+    const titleRef = useRef(null);
     const textRef = useRef(null);
     const imageRef = useRef(null);
 
     useEffect(() => {
+        const title = titleRef.current;
         const text = textRef.current;
         const image = imageRef.current;
 
-        gsap.from(text, {
-            opacity: 0.2,
-            duration: 1,
+        const tl = gsap.timeline({ 
             scrollTrigger: {
                 trigger: containerRef.current,
-                start: 'top center',
-                end: 'bottom center',
-                scrub: true
+                start: 'top 60%',
+                once: true
             }
         });
 
-        gsap.fromTo(image.querySelector('div'), 
-            { yPercent: -5, scale: 1.1 },
+        tl.from(title, { y: '50%', opacity: 0, duration: 1.2, ease: 'power4.out' })
+          .from(text.children, { y: '30%', opacity: 0, stagger: 0.15, duration: 1, ease: 'power4.out' }, "-=0.8")
+          .from(image, { clipPath: 'polygon(0 100%, 100% 100%, 100% 100%, 0% 100%)', duration: 1.5, ease: 'power4.inOut' }, "-=0.8");
+        
+        gsap.fromTo(image.querySelector('div'),
+            { scale: 1.2 }, 
             {
-                yPercent: 5,
                 scale: 1,
                 ease: 'none',
                 scrollTrigger: {
@@ -44,18 +46,19 @@ export default function Story() {
     }, []);
 
     return (
-        <section ref={containerRef} className="relative py-32 md:py-64 bg-[#0a0a0a] text-[#f4f4f0]">
-            <div className="container mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
-                <div ref={textRef} className="lg:col-span-2 text-left">
-                    <h2 className="font-serif text-5xl md:text-7xl !leading-tight uppercase">Our Story</h2>
-                    <p className="font-sans text-lg mt-8">
-                        In a world of fleeting moments, our story is an anchor. It began with a shared glance, a silent acknowledgment of a connection that transcended words. A journey of two souls, two distinct melodies, finding harmony in a shared symphony. We’ve built a universe in whispered conversations and roaring laughter, a testament to a love that is both a quiet sanctuary and a grand adventure.
-                    </p>
+        <section ref={containerRef} className="py-32 md:py-48 bg-[#f4f4f0] text-[#1a1a1a]">
+            <div className="container mx-auto px-8 max-w-7xl">
+                <div className="text-center max-w-3xl mx-auto">
+                    <h2 ref={titleRef} className="font-serif text-5xl md:text-7xl lg:text-8xl uppercase !leading-tight">Kisah Kami</h2>
+                    <div ref={textRef} className="mt-8 font-sans text-base md:text-lg leading-relaxed">
+                        <p className="mb-4">Di dunia yang penuh momen sesaat, kisah kami adalah sebuah jangkar. Dimulai dari satu tatapan, pengakuan dalam diam akan sebuah koneksi yang melampaui kata-kata.</p>
+                        <p>Sebuah perjalanan dua jiwa, dua melodi berbeda, menemukan harmoni dalam simfoni bersama. Kami telah membangun semesta dalam bisikan percakapan dan gelak tawa, sebuah bukti cinta yang menjadi suaka yang sunyi sekaligus petualangan besar.</p>
+                    </div>
                 </div>
-                <div ref={imageRef} className="lg:col-span-3 h-[70vh] md:h-[90vh] overflow-hidden">
+                <div ref={imageRef} className="mt-24 h-[60vh] md:h-[80vh] overflow-hidden">
                      <div 
                         className="w-full h-full bg-cover bg-center"
-                        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1515934751-4173751fe751?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }}
+                        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1523438885283-e69435c87903?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }}
                      ></div>
                 </div>
             </div>
